@@ -1,13 +1,46 @@
-let g:loaded_python3_provider=1
-let g:python3_host_prog='C:\Windows\Python310\python.exe'
-let g:python_host_prog='C:\Windows\Python310\python.exe'
 let g:loaded_node_provider=0
 let g:deoplete#enable_at_startup = 1
 
-call plug#begin('C:\Users\abdul\AppData\Local\nvim\autoload\plugged')
-"Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf', {'do': {-> fzf#install()}}
+" Set language and encoding options
+set encoding=utf-8
+set fileencoding=utf-8
+
+" Enable line numbers
+set number
+set relativenumber
+" Enable syntax highlighting
+syntax on
+" Enable clipboard support
+set clipboard=unnamedplus
+" Set tab and indent preferences
+set tabstop=4
+set shiftwidth=4
+set expandtab
+" Enable mouse support
+set mouse=a
+
+filetype plugin indent on
+
+" Set color scheme (you can change this as you like)
+colorscheme desert
+" Plugins (using vim-plug)
+call plug#begin('~/.local/share/nvim/plugged')
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
+" Plugin for Python autocompletion and linting
+Plug 'hrsh7th/nvim-cmp'         " Autocompletion plugin
+Plug 'hrsh7th/cmp-nvim-lsp'     " LSP source for nvim-cmp
+Plug 'hrsh7th/cmp-buffer'        " Buffer completions
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'} " Treesitter for
+"syntax highlighting
+Plug 'preservim/nerdtree'        " File explorer
+Plug 'scrooloose/nerdcommenter'  " Commenting plugin
+Plug 'tjdevries/colorbuddy.vim'  " Color buddy for custom colors
+" For Avante
+Plug 'stevearc/dressing.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'MunifTanjim/nui.nvim'
+Plug 'MeanderingProgrammer/render-markdown.nvim'
 Plug 'mfussenegger/nvim-dap'
 Plug 'rcarriga/nvim-dap-ui'
 Plug 'roxma/nvim-yarp'
@@ -36,34 +69,34 @@ Plug 'dkarter/bullets.vim'
 Plug 'wellle/context.vim'
 Plug 'antoinemadec/FixCursorHold.nvim'
 
-" Functionalities - Python
-Plug 'psf/black', { 'branch': 'stable' }
-
 " Aesthetics - Others
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
 Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'junegunn/limelight.vim'
 Plug 'junegunn/vim-journal'
 Plug 'Chaitanyabsprip/present.nvim'
+
+" Optional deps
+Plug 'hrsh7th/nvim-cmp'
+Plug 'nvim-tree/nvim-web-devicons' "or Plug 'echasnovski/mini.icons'
+Plug 'HakonHarnes/img-clip.nvim'
+Plug 'zbirenbaum/copilot.lua'
+" Yay, pass source=true if you want to build from source
+Plug 'yetone/avante.nvim', { 'branch': 'main', 'do': 'make' }
 call plug#end()
 
-set fileencoding=utf-8
-colorscheme peachpuff
 
-filetype plugin indent on
-set tabstop=4 softtabstop=4 shiftwidth=4 expandtab smarttab autoindent
-set incsearch ignorecase smartcase hlsearch
-set wildmode=longest,list,full wildmenu
-set ruler laststatus=2 showcmd showmode
-set list listchars=trail:»,tab:»-
-set fillchars+=vert:\ 
-set wrap breakindent
-set encoding=utf-8
-set textwidth=0
-set hidden
-set relativenumber
-set number
-set title
+" Floaterm keybindings
+nnoremap <silent> <leader>ft :FloatermToggle<CR>	" Toggle Floaterm
+nnoremap <silent> <leader>f :FloatermNew --cd=%<CR>	" Open terminal in current directory
+nnoremap <silent> <leader>fp :FloatermPrev<CR>	" Previous terminal
+nnoremap <silent> <leader>fn :FloatermNext<CR>	" Next terminal
+
+" Set up Markdown preview
+augroup markdownpreview
+	autocmd!
+	autocmd FileType markdown nnoremap <silent> <leader>mp :MarkdownPreview<CR>
+augroup END
 
 " HTML, XML, Jinja
 autocmd FileType html setlocal shiftwidth=2 tabstop=2 softtabstop=2
@@ -236,7 +269,7 @@ command! -nargs=0 Format :call CocActionAsync('format')
 command! -nargs=? Fold :call     CocAction('fold', <f-args>)
 
 " Add `:OR` command for organize imports of the current buffer.
-command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.organizeImport')
+"command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.organizeImport')
 
 " Add (Neo)Vim's native statusline support.
 " NOTE: Please see `:h coc-status` for integrations with external plugins that
